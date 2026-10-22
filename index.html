@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgentHive | Multi-Agent AI Startup Launch Kit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0c0d16; --panel:#14162a; --panel-2:#1b1d36; --line:rgba(255,255,255,.09);
+  --text:#eceaf7; --dim:#a3a1c2; --violet:#8b7cf8; --violet-deep:#6a5af0; --honey:#f6b93b;
+  --good:#5fd6a0; --bad:#f08a8a;
+  --display:'Bricolage Grotesque','Segoe UI',system-ui,sans-serif;
+  --body:'Figtree','Segoe UI',system-ui,sans-serif;
+  --hex:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+body{font-family:var(--body);background:var(--ink);color:var(--text);line-height:1.55;min-height:100vh;-webkit-font-smoothing:antialiased}
+body::before,body::after{content:'';position:fixed;width:46vw;height:46vw;max-width:560px;max-height:560px;border-radius:50%;filter:blur(110px);opacity:.22;z-index:-1;pointer-events:none}
+body::before{background:var(--violet);top:-14vw;left:-14vw;animation:driftA 24s ease-in-out infinite alternate}
+body::after{background:var(--honey);bottom:-16vw;right:-16vw;animation:driftB 28s ease-in-out infinite alternate}
+@keyframes driftA{from{transform:translate(0,0)}to{transform:translate(7vw,5vw)}}
+@keyframes driftB{from{transform:translate(0,0)}to{transform:translate(-6vw,-4vw)}}
+button{font-family:inherit;color:inherit}
+a{color:var(--violet)}
+:focus-visible{outline:2px solid var(--honey);outline-offset:3px;border-radius:6px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+h1,h2,h3,h4,h5{font-family:var(--display);font-weight:700;letter-spacing:-.02em;line-height:1.15}
+
+/* ---------- top bar (landing and intake) ---------- */
+.topbar{display:flex;align-items:baseline;gap:14px;padding:22px clamp(20px,5vw,56px)}
+.brand{font-family:var(--display);font-weight:700;font-size:1.35rem;letter-spacing:-.03em}
+.brand-sub{color:var(--dim);font-size:.85rem}
+
+/* ---------- buttons ---------- */
+.btn{position:relative;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 26px;border:0;border-radius:12px;font-size:1rem;font-weight:600;cursor:pointer;background:linear-gradient(135deg,var(--violet-deep),#9a6cf6);color:#fff;text-decoration:none;transition:transform .15s,box-shadow .15s,opacity .15s;box-shadow:0 6px 24px rgba(106,90,240,.28)}
+.btn::after{content:'';position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(120deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-20deg);transition:left .5s ease}
+.btn:hover::after{left:120%}
+.btn:hover{transform:translateY(-1px);box-shadow:0 10px 30px rgba(106,90,240,.38)}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+.btn-quiet{background:transparent;border:1px solid var(--line);color:var(--text);box-shadow:none;padding:9px 16px;font-size:.88rem;border-radius:10px}
+.btn-quiet:hover{border-color:var(--violet);box-shadow:none;transform:none}
+.btn-honey{background:var(--honey);color:#1b1405;box-shadow:0 6px 24px rgba(246,185,59,.22)}
+.btn-honey:hover{box-shadow:0 10px 30px rgba(246,185,59,.32)}
+
+/* ---------- landing ---------- */
+.hero{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:56px;align-items:center;max-width:1180px;margin:0 auto;padding:36px clamp(20px,5vw,56px) 80px}
+.hero h1{font-size:clamp(2.2rem,4.6vw,3.6rem);max-width:15ch;margin-bottom:20px;animation:fadeUp .7s ease both}
+.hero p.lead{color:var(--dim);font-size:1.08rem;max-width:52ch;margin-bottom:32px;animation:fadeUp .7s .12s ease both}
+.idea-row{animation:fadeUp .7s .24s ease both}
+.chips{animation:fadeUp .7s .36s ease both}
+.cluster-wrap{animation:fadeUp .8s .2s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.idea-row{display:flex;gap:12px;max-width:600px}
+.idea-row input{flex:1;min-width:0;padding:16px 18px;background:rgba(20,22,42,.7);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.12);border-radius:12px;font:inherit;font-size:1rem;color:var(--text);outline:none}
+.idea-row input::placeholder{color:#7f7da0}
+.idea-row input:focus{border-color:var(--violet)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.chip{padding:7px 14px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--dim);font-size:.85rem;cursor:pointer}
+.chip:hover{border-color:var(--violet);color:var(--text)}
+.fine{margin-top:22px;color:#85839f;font-size:.82rem;max-width:56ch}
+.error-line{margin-top:14px;color:var(--bad);font-size:.9rem}
+
+/* hex cluster: mirrors the real graph (Website and Finder run in parallel) */
+.cluster-wrap{display:flex;flex-direction:column;align-items:center;gap:22px}
+.cluster{position:relative;width:390px;height:208px;max-width:100%}
+.hx{position:absolute;width:120px;height:104px;clip-path:var(--hex);background:linear-gradient(135deg,var(--violet),var(--honey));animation:floaty 5s ease-in-out infinite;animation-delay:var(--fd,0s)}
+.hx>span{position:absolute;inset:2px;clip-path:var(--hex);background:var(--panel);display:flex;flex-direction:column;align-items:center;justify-content:center;animation:hexfill .7s ease forwards;animation-delay:var(--d)}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+.hx b{font-family:var(--display);font-size:1.7rem;line-height:1}
+.hx i{font-style:normal;font-size:.7rem;color:var(--dim);margin-top:4px}
+@keyframes hexfill{from{background:var(--panel)}to{background:linear-gradient(135deg,#3b3392,#5a3f9e)}}
+.cluster-note{color:#85839f;font-size:.82rem;max-width:36ch;text-align:center}
+
+/* ---------- intake ---------- */
+.narrow{max-width:640px;margin:0 auto;padding:12px clamp(20px,5vw,32px) 80px}
+.sheet{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:32px}
+.sheet h2{font-size:1.5rem;margin-bottom:6px}
+.sheet .sub{color:var(--dim);font-size:.92rem;margin-bottom:26px}
+.field{margin-bottom:18px}
+.field label{display:block;font-size:.88rem;font-weight:600;margin-bottom:6px}
+.field input,.field select{width:100%;padding:12px 14px;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;font:inherit;color:var(--text);outline:none}
+.field input:focus,.field select:focus{border-color:var(--violet)}
+.field select option{background:var(--panel-2)}
+.sheet-actions{display:flex;justify-content:space-between;align-items:center;margin-top:26px;gap:12px}
+
+/* ---------- dashboard ---------- */
+.dash{display:grid;grid-template-columns:300px minmax(0,1fr);min-height:100vh}
+.side{position:sticky;top:0;align-self:start;height:100vh;overflow:auto;background:#0f1020;border-right:1px solid var(--line);padding:24px 22px;display:flex;flex-direction:column;gap:22px}
+.side .brand{font-size:1.2rem}
+.launch-for{font-size:.82rem;color:var(--dim)}
+.launch-for strong{display:block;color:var(--text);font-size:.95rem;font-weight:600;margin-top:2px;overflow-wrap:anywhere}
+.agent-list{list-style:none;position:relative}
+.agent-list li{display:flex;gap:14px;align-items:center;padding:10px 0;position:relative}
+.agent-list li:not(:last-child)::after{content:'';position:absolute;left:21px;top:56px;width:2px;height:18px;background:var(--line)}
+.agent-list li[data-state=done]:not(:last-child)::after{background:var(--violet)}
+.hex{position:relative;flex:0 0 44px;width:44px;height:38px;clip-path:var(--hex);background:var(--line);display:flex;align-items:center;justify-content:center}
+.hex::before{content:'';position:absolute;inset:2px;clip-path:var(--hex);background:var(--panel)}
+.hex span{position:relative;font-family:var(--display);font-weight:700;font-size:.95rem;color:var(--dim)}
+.hex-running{background:var(--honey)}
+.hex-running::before{background:#2a2312;animation:pulse 1.6s ease-in-out infinite}
+.hex-running span{color:var(--honey)}
+.hex-done{background:var(--violet)}
+.hex-done::before{background:linear-gradient(135deg,#3b3392,#5a3f9e)}
+.hex-done span{color:#fff}
+.hex-error{background:var(--bad)}
+.hex-error span{color:var(--bad)}
+@keyframes pulse{50%{opacity:.55}}
+.agent-name{font-weight:600;font-size:.93rem}
+.agent-status{font-size:.8rem;color:var(--dim)}
+li[data-state=running] .agent-status{color:var(--honey)}
+li[data-state=done] .agent-status{color:var(--good)}
+li[data-state=error] .agent-status{color:var(--bad)}
+.clock{font-size:.82rem;color:var(--dim)}
+.conn{margin-top:auto;border:1px solid var(--line);border-radius:14px;padding:14px;background:var(--panel)}
+.conn h4{font-size:.92rem;margin-bottom:4px}
+.conn p.sub{font-size:.78rem;color:var(--dim);margin-bottom:10px}
+.conn ul{list-style:none;display:grid;gap:8px}
+.conn li{display:flex;justify-content:space-between;align-items:center;font-size:.85rem}
+.tag{font-size:.72rem;padding:3px 9px;border-radius:999px;border:1px solid var(--line);color:var(--dim)}
+.tag-live{border-color:rgba(95,214,160,.5);color:var(--good)}
+.tag-locked{border-color:rgba(246,185,59,.4);color:var(--honey)}
+.conn a.more{display:inline-block;margin-top:10px;font-size:.8rem}
+
+.main{padding:34px clamp(18px,4vw,48px) 90px;max-width:980px;width:100%}
+.main-head h2{font-size:1.7rem;margin-bottom:4px}
+.main-head p{color:var(--dim);font-size:.92rem;margin-bottom:26px}
+.banner{padding:14px 18px;border-radius:12px;margin-bottom:20px;font-size:.92rem;border:1px solid var(--line);background:var(--panel)}
+.banner-error{border-color:rgba(240,138,138,.5);color:var(--bad)}
+.banner-wait{border-color:rgba(246,185,59,.4);color:var(--honey)}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;margin-bottom:18px;overflow:hidden}
+.card-head{width:100%;display:flex;align-items:center;gap:14px;padding:18px 22px;background:none;border:0;cursor:pointer;text-align:left}
+.card-head h3{font-size:1.1rem;flex:1}
+.state-chip{font-size:.75rem;color:var(--dim)}
+.card[data-state=running] .state-chip{color:var(--honey)}
+.card[data-state=done] .state-chip{color:var(--good)}
+.card[data-state=error] .state-chip{color:var(--bad)}
+.chev{width:10px;height:10px;border-right:2px solid var(--dim);border-bottom:2px solid var(--dim);transform:rotate(45deg);transition:transform .2s;margin:0 4px 4px 0}
+.card.collapsed .chev{transform:rotate(-45deg);margin:0 0 0 0}
+.card-body{padding:0 22px 24px}
+.card.collapsed .card-body{display:none}
+.card-body h4{font-size:.9rem;color:var(--dim);margin:20px 0 10px;font-weight:600;letter-spacing:0}
+.card-body h4:first-child{margin-top:4px}
+.skeleton p{color:var(--dim);font-size:.9rem;margin-bottom:14px}
+.skel-line{height:12px;border-radius:6px;background:linear-gradient(90deg,var(--panel-2),#262948,var(--panel-2));background-size:200% 100%;animation:shimmer 1.6s linear infinite;margin-bottom:10px}
+.skel-line:nth-child(3){width:70%}.skel-line:nth-child(4){width:50%}
+@keyframes shimmer{to{background-position:-200% 0}}
+
+.row-item{display:flex;gap:14px;padding:11px 14px;background:var(--panel-2);border-radius:10px;margin-bottom:8px;align-items:baseline}
+.row-item strong{white-space:nowrap;font-size:.9rem}
+.row-item span{color:var(--dim);font-size:.86rem}
+ul.plain{list-style:none}
+ul.plain li{position:relative;padding:8px 0 8px 18px;color:var(--dim);font-size:.9rem;border-bottom:1px solid var(--line)}
+ul.plain li:last-child{border-bottom:0}
+ul.plain li::before{content:'';position:absolute;left:0;top:16px;width:6px;height:6px;border-radius:50%;background:var(--violet)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.box{padding:13px 14px;background:var(--panel-2);border-radius:10px}
+.box b{display:block;font-size:.78rem;color:var(--dim);margin-bottom:4px;font-weight:600}
+.box span{font-size:.88rem}
+
+.site-card{position:relative;border-radius:14px;overflow:hidden;min-height:190px;display:flex;align-items:flex-end;background:var(--panel-2)}
+.site-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.site-card::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(12,13,22,.1),rgba(12,13,22,.88))}
+.site-card div{position:relative;z-index:1;padding:20px;z-index:2}
+.site-card h4{font-size:1.5rem;margin:0 0 4px;color:#fff}
+.site-card p{color:#d9d6ee;font-size:.92rem}
+.note{margin-top:14px;padding:14px;background:var(--panel-2);border-radius:10px;font-size:.85rem;color:var(--dim)}
+.note strong{color:var(--text)}
+
+.segment{padding:14px 0;border-bottom:1px solid var(--line)}
+.segment:last-child{border-bottom:0}
+.segment h5{font-size:1rem;margin-bottom:2px}
+.segment .why{color:var(--dim);font-size:.84rem;margin-bottom:10px}
+.target{padding:10px 14px;background:var(--panel-2);border-radius:10px;margin-bottom:8px}
+.target a{font-weight:600;font-size:.92rem;text-decoration:none}
+.target a:hover{text-decoration:underline}
+.target p{color:var(--dim);font-size:.85rem;margin-top:2px}
+.contact-row{display:flex;flex-wrap:wrap;gap:14px;margin-top:8px;padding-top:8px;border-top:1px solid var(--line)}
+.contact-item{display:inline-flex;align-items:center;gap:5px;font-size:.83rem;color:var(--dim)}
+.contact-item svg{color:var(--violet);flex:0 0 14px}
+.contact-item a{font-weight:500;color:var(--violet);text-decoration:none}
+.contact-item a:hover{text-decoration:underline}
+.target-header{display:flex;align-items:center;gap:8px}
+.row-item a{color:var(--violet);font-weight:500;text-decoration:none;font-size:.85rem}
+.row-item a:hover{text-decoration:underline}
+.empty{color:var(--dim);font-size:.86rem;font-style:italic}
+
+.posts{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.post{background:var(--panel-2);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;border:1px solid var(--line)}
+.post-top{display:flex;align-items:center;gap:10px;padding:10px 12px}
+.avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--violet),var(--honey));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem;color:#17102e;flex:0 0 30px}
+.post-top b{display:block;font-size:.84rem;line-height:1.2}
+.post-top small{color:var(--dim);font-size:.74rem}
+.post img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:#0f1020}
+.post-body{padding:12px;flex:1;display:flex;flex-direction:column;gap:8px}
+.post-body p{font-size:.84rem;line-height:1.5;color:#dcd9f0}
+.post-body .tags{color:var(--violet);font-size:.8rem;overflow-wrap:anywhere}
+.post-actions{padding:0 12px 12px;display:flex;gap:8px;flex-wrap:wrap}
+.post-this-btn{font-size:.8rem!important;padding:7px 12px!important}
+.live-box{margin-top:14px;padding:16px;border-radius:12px;background:var(--panel-2);border:1px solid var(--line);font-size:.9rem}
+.live-box h5{font-size:1rem;margin-bottom:4px}
+.live-box p{color:var(--dim);font-size:.86rem;margin-bottom:10px}
+.live-box.live{border-color:rgba(95,214,160,.5)}
+.live-box.bad{border-color:rgba(240,138,138,.5)}
+.live-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.spinner{display:inline-block;width:14px;height:14px;border:2px solid var(--line);border-top-color:var(--honey);border-radius:50%;animation:spin .8s linear infinite;vertical-align:-2px;margin-right:8px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.textblock{padding:14px;background:var(--panel-2);border-radius:10px;font-size:.88rem;color:#dcd9f0;white-space:pre-wrap;margin-bottom:8px}
+
+.timeline{list-style:none;position:relative;margin-left:6px}
+.timeline li{display:grid;grid-template-columns:76px 1fr;gap:14px;padding:0 0 22px 18px;position:relative;border-left:2px solid var(--line)}
+.timeline li:last-child{border-left-color:transparent;padding-bottom:0}
+.timeline li::before{content:'';position:absolute;left:-7px;top:4px;width:12px;height:12px;border-radius:50%;background:var(--violet)}
+.wk{font-family:var(--display);font-weight:700;font-size:.95rem;color:var(--honey)}
+.timeline h5{font-size:1rem;margin-bottom:6px}
+.timeline ul{list-style:none}
+.timeline ul li{display:block;border:0;padding:3px 0;font-size:.88rem;color:var(--dim)}
+.timeline ul li::before{display:none}
+
+.cta{margin-top:22px;padding:20px;border-radius:14px;background:linear-gradient(135deg,rgba(106,90,240,.18),rgba(246,185,59,.1));border:1px solid var(--line)}
+.cta h4{margin:0 0 4px!important;font-size:1.05rem!important;color:var(--text)!important}
+.cta p{color:var(--dim);font-size:.88rem;margin-bottom:12px}
+.end-actions{text-align:center;margin-top:30px}
+
+@media (max-width:960px){
+  .hero{grid-template-columns:1fr;gap:40px}
+  .cluster-wrap{order:-1}
+  .dash{grid-template-columns:1fr}
+  .side{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line);padding:18px}
+  .agent-list{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px}
+  .agent-list li{flex-direction:column;align-items:flex-start;min-width:132px;gap:6px}
+  .agent-list li::after{display:none!important}
+  .conn{margin-top:0}
+}
+@media (max-width:560px){
+  .idea-row{flex-direction:column}
+  .grid2{grid-template-columns:1fr}
+  .row-item{flex-direction:column;gap:2px}
+  .timeline li{grid-template-columns:1fr;gap:4px}
+  .cluster{transform:scale(.78);transform-origin:top center;height:170px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  *::before,*::after{animation:none!important}
+  .hx>span{background:linear-gradient(135deg,#3b3392,#5a3f9e)}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ LANDING ============ -->
+<div id="stageLanding">
+  <header class="topbar"><span class="brand">AgentHive</span><span class="brand-sub">Multi-Agent AI Startup Launch Kit</span></header>
+  <main class="hero">
+    <div>
+      <h1>Describe a business in one sentence. Five agents get it ready to launch.</h1>
+      <p class="lead">They research your city, build your website, find your first customers, and write your first week of posts. One of those posts goes live on a real Instagram account.</p>
+      <div class="idea-row">
+        <label for="ideaInput" class="sr-only">Your business idea</label>
+        <input type="text" id="ideaInput" maxlength="300" placeholder="A bakery in Jaipur that delivers fresh bread daily" autocomplete="off">
+        <button class="btn" id="startBtn" type="button">Build my launch kit</button>
+      </div>
+      <div class="chips" aria-label="Example ideas">
+        <button class="chip" type="button" data-idea="A dental clinic in Gwalior">A dental clinic in Gwalior</button>
+        <button class="chip" type="button" data-idea="A salon in Agra">A salon in Agra</button>
+        <button class="chip" type="button" data-idea="A bakery in Jaipur that delivers fresh bread daily">A bakery in Jaipur</button>
+      </div>
+      <p class="error-line" id="landingError" role="alert" hidden></p>
+      <p class="fine">Free demo built with LangGraph, Groq, Tavily and Pexels. Your idea is used only to generate this launch kit.</p>
+    </div>
+    <div class="cluster-wrap">
+      <div class="cluster" aria-hidden="true">
+        <div class="hx" style="left:0;top:104px;--fd:0s"><span style="--d:.2s"><b>I</b><i>Intake</i></span></div>
+        <div class="hx" style="left:90px;top:52px;--fd:.6s"><span style="--d:.55s"><b>M</b><i>Market</i></span></div>
+        <div class="hx" style="left:180px;top:0;--fd:1.2s"><span style="--d:.9s"><b>W</b><i>Website</i></span></div>
+        <div class="hx" style="left:180px;top:104px;--fd:.3s"><span style="--d:.9s"><b>F</b><i>Finder</i></span></div>
+        <div class="hx" style="left:270px;top:52px;--fd:1.8s"><span style="--d:1.3s"><b>S</b><i>Social</i></span></div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- ============ INTAKE ============ -->
+<div id="stageIntake" hidden>
+  <header class="topbar"><span class="brand">AgentHive</span><span class="brand-sub">Multi-Agent AI Startup Launch Kit</span></header>
+  <main class="narrow">
+    <div class="sheet">
+      <h2>A few questions first</h2>
+      <p class="sub">The Intake agent wrote these for your idea. Your answers make the research specific to your city and budget.</p>
+      <div id="intakeFields"></div>
+      <p class="error-line" id="intakeError" role="alert" hidden></p>
+      <div class="sheet-actions">
+        <button class="btn btn-quiet" id="backBtn" type="button">Change my idea</button>
+        <button class="btn" id="runBtn" type="button">Start the agents</button>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ============ DASHBOARD ============ -->
+<div id="stageDash" class="dash" hidden>
+  <aside class="side" aria-label="Agents">
+    <span class="brand">AgentHive</span>
+    <div class="launch-for">Launching<strong id="ideaLabel"></strong></div>
+    <ul class="agent-list" id="agentList"></ul>
+    <div class="clock" id="clock" aria-live="polite"></div>
+    <div class="conn">
+      <h4>Connections</h4>
+      <p class="sub">Advanced: connect your own accounts and the agents publish for you.</p>
+      <ul>
+        <li><span>Instagram</span><span class="tag" id="igTag">Demo account</span></li>
+        <li><span>Gmail</span><span class="tag tag-locked">Advanced</span></li>
+        <li><span>WhatsApp</span><span class="tag tag-locked">Advanced</span></li>
+      </ul>
+      <a class="more" href="https://autothynk.com" target="_blank" rel="noopener">Ask Autothynk about Advanced</a>
+    </div>
+    <button class="btn btn-quiet" type="button" id="againSide">Start another idea</button>
+  </aside>
+  <section class="main">
+    <div class="main-head"><h2>Your launch kit</h2><p id="mainSub">The agents are working. Results appear here as each one finishes.</p></div>
+    <div id="banner" hidden></div>
+    <div id="cards"></div>
+    <div class="end-actions" id="endActions" hidden><button class="btn" type="button" id="againBtn">Start another idea</button></div>
+  </section>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const safeUrl = (u) => (/^https?:\/\//i.test(String(u || '')) ? String(u) : '');
+const arr = (x) => (Array.isArray(x) ? x : []);
+
+const AGENTS = [
+  {key:'intake',    letter:'I', name:'Intake Agent',          doing:'Asked about your business'},
+  {key:'market',    letter:'M', name:'Market Research Agent', doing:'Researching your city'},
+  {key:'website',   letter:'W', name:'Website Builder Agent', doing:'Building your landing page'},
+  {key:'customers', letter:'F', name:'Customer Finder Agent', doing:'Finding first customers'},
+  {key:'content',   letter:'S', name:'Social Media Agent',    doing:'Writing posts and a 30-day plan'},
+];
+const CARDS = [
+  {key:'market',    title:'Market Research Agent',  working:'Looking up competitors and gaps in your city.'},
+  {key:'website',   title:'Website Builder Agent',  working:'Writing the copy and building the page.'},
+  {key:'customers', title:'Customer Finder Agent',  working:'Searching for organizations that could buy from you or send you customers.'},
+  {key:'content',   title:'Social Media Agent',     working:'Writing your week-one posts and a 30-day plan.'},
+];
+
+let idea = '', questionIds = [], runId = '', latest = null, cfg = {demo_publish:false, remaining_today:0, profile_url:''};
+let failures = 0, pollTimer = null;
+const collapsed = new Set();
+const cardSig = {};
+let pub = {state:'idle'};
+let pubPoll = null, pubClock = null;
+
+/* ---------- helpers ---------- */
+function show(stage){
+  ['stageLanding','stageIntake','stageDash'].forEach((id) => { $(id).hidden = id !== stage; });
+  window.scrollTo(0, 0);
+}
+function setError(id, msg){ const el = $(id); el.textContent = msg || ''; el.hidden = !msg; }
+async function api(path, options){
+  const res = await fetch(path, options);
+  let data = {};
+  try { data = await res.json(); } catch (e) { /* not JSON */ }
+  if (!res.ok) {
+    const detail = data && data.detail;
+    throw new Error(typeof detail === 'string' ? detail : 'Something went wrong. Please try again.');
+  }
+  return data;
+}
+function copyText(text, btn){
+  const done = () => { const old = btn.textContent; btn.textContent = 'Copied'; setTimeout(() => { btn.textContent = old; }, 1400); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, () => fallbackCopy(text, done));
+  } else { fallbackCopy(text, done); }
+}
+function fallbackCopy(text, done){
+  const ta = document.createElement('textarea');
+  ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); done(); } catch (e) { /* ignore */ }
+  document.body.removeChild(ta);
+}
+function mmss(sec){ sec = Math.max(0, Math.round(sec || 0)); return Math.floor(sec / 60) + ':' + String(sec % 60).padStart(2, '0'); }
+
+async function loadConfig(){
+  try { cfg = await api('/config'); } catch (e) { /* keep defaults */ }
+  const tag = $('igTag');
+  if (cfg.demo_publish) { tag.textContent = 'Live demo'; tag.className = 'tag tag-live'; }
+  else { tag.textContent = 'Off here'; tag.className = 'tag'; }
+}
+
+/* ---------- landing and intake ---------- */
+document.querySelectorAll('.chip').forEach((c) => c.addEventListener('click', () => { $('ideaInput').value = c.dataset.idea; $('ideaInput').focus(); }));
+$('ideaInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') startIntake(); });
+$('startBtn').addEventListener('click', startIntake);
+$('backBtn').addEventListener('click', () => show('stageLanding'));
+$('runBtn').addEventListener('click', runAgents);
+$('againBtn').addEventListener('click', () => location.reload());
+$('againSide').addEventListener('click', () => location.reload());
+
+async function startIntake(){
+  idea = $('ideaInput').value.trim();
+  setError('landingError', '');
+  if (idea.length < 3) { setError('landingError', 'Describe your business idea in a short sentence.'); return; }
+  const btn = $('startBtn'); btn.disabled = true; btn.textContent = 'Thinking...';
+  try {
+    const data = await api('/intake', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({idea})});
+    renderIntake(arr(data.questions));
+    show('stageIntake');
+  } catch (e) { setError('landingError', e.message); }
+  btn.disabled = false; btn.textContent = 'Build my launch kit';
+}
+
+function renderIntake(questions){
+  questionIds = questions.map((q) => q.id);
+  $('intakeFields').innerHTML = questions.map((q) => {
+    const id = 'q_' + esc(q.id);
+    if (q.type === 'select' && arr(q.options).length) {
+      const opts = q.options.map((o) => '<option value="' + esc(o) + '">' + esc(o) + '</option>').join('');
+      return '<div class="field"><label for="' + id + '">' + esc(q.question) + '</label><select id="' + id + '"><option value="">Select</option>' + opts + '</select></div>';
+    }
+    return '<div class="field"><label for="' + id + '">' + esc(q.question) + '</label><input type="text" id="' + id + '" maxlength="200" placeholder="' + esc(q.placeholder || '') + '"></div>';
+  }).join('');
+}
+
+async function runAgents(){
+  const context = {};
+  questionIds.forEach((id) => { const el = $('q_' + id); if (el && el.value.trim()) context[id] = el.value.trim(); });
+  setError('intakeError', '');
+  const btn = $('runBtn'); btn.disabled = true;
+  try {
+    const data = await api('/launch', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({idea, context})});
+    runId = data.run_id;
+  } catch (e) { setError('intakeError', e.message); btn.disabled = false; return; }
+  btn.disabled = false;
+  $('ideaLabel').textContent = idea;
+  buildCards();
+  renderDash({agents:{market:'pending', website:'pending', customers:'pending', content:'pending'}, queued:true});
+  show('stageDash');
+  await loadConfig();
+  pollRun();
+}
+
+/* ---------- dashboard ---------- */
+function buildCards(){
+  $('cards').innerHTML = CARDS.map((c) =>
+    '<article class="card" id="card-' + c.key + '" data-state="pending">' +
+      '<button class="card-head" type="button" aria-expanded="true" data-card="' + c.key + '">' +
+        '<h3>' + esc(c.title) + '</h3><span class="state-chip">Waiting</span><span class="chev" aria-hidden="true"></span>' +
+      '</button><div class="card-body"></div></article>'
+  ).join('');
+  document.querySelectorAll('.card-head').forEach((b) => b.addEventListener('click', () => {
+    const key = b.dataset.card, card = $('card-' + key);
+    const isCollapsed = card.classList.toggle('collapsed');
+    b.setAttribute('aria-expanded', String(!isCollapsed));
+    if (isCollapsed) collapsed.add(key); else collapsed.delete(key);
+  }));
+}
+
+async function pollRun(){
+  try {
+    const snap = await api('/run/' + encodeURIComponent(runId));
+    failures = 0; latest = snap; renderDash(snap);
+    if (snap.done) return;
+  } catch (e) {
+    failures += 1;
+    if (failures >= 5) { showBanner('error', e.message || 'Lost the connection to the server.'); return; }
+  }
+  pollTimer = setTimeout(pollRun, 2000);
+}
+
+function showBanner(kind, msg){
+  const b = $('banner');
+  b.hidden = !msg; b.className = 'banner ' + (kind === 'error' ? 'banner-error' : 'banner-wait'); b.textContent = msg || '';
+}
+
+function renderDash(snap){
+  const agents = snap.agents || {};
+  $('agentList').innerHTML = AGENTS.map((a) => {
+    const state = a.key === 'intake' ? 'done' : (agents[a.key] || 'pending');
+    const status = {pending:'Waiting', running:a.doing, done:'Done', error:'Failed'}[state];
+    return '<li data-state="' + state + '"><span class="hex hex-' + state + '" aria-hidden="true"><span>' + a.letter + '</span></span>' +
+           '<div><div class="agent-name">' + esc(a.name) + '</div><div class="agent-status">' + esc(status) + '</div></div></li>';
+  }).join('');
+
+  if (snap.queued) showBanner('wait', 'Another launch is running. Yours starts as soon as it finishes.');
+  else if (snap.error) showBanner('error', 'The run stopped: ' + snap.error);
+  else showBanner('', '');
+
+  $('clock').textContent = snap.queued ? 'In line' : (snap.done ? 'Finished in ' + mmss(snap.elapsed) : 'Running for ' + mmss(snap.elapsed));
+  if (snap.done && !snap.error) $('mainSub').textContent = 'All agents finished. Open or collapse any card.';
+  $('endActions').hidden = !snap.done;
+
+  CARDS.forEach((c) => renderCard(c, snap));
+}
+
+function renderCard(c, snap){
+  const state = (snap.agents || {})[c.key] || 'pending';
+  const data = snap[c.key];
+  const sig = state + '|' + JSON.stringify(data || null);
+  const card = $('card-' + c.key);
+  if (cardSig[c.key] === sig) return;
+  cardSig[c.key] = sig;
+  card.dataset.state = state;
+  card.querySelector('.state-chip').textContent = {pending:'Waiting', running:'Working', done:'Done', error:'Failed'}[state];
+  const body = card.querySelector('.card-body');
+  if (state === 'done' && data) {
+    body.innerHTML = ({market:renderMarket, website:renderWebsite, customers:renderCustomers, content:renderContent}[c.key])(data);
+    wireCard(c.key, body);
+    if (c.key === 'content') renderPublish();
+  } else if (state === 'error') {
+    body.innerHTML = '<p class="empty">This agent failed. The other results are still usable.</p>';
+  } else {
+    body.innerHTML = '<div class="skeleton"><p>' + esc(state === 'running' ? c.working : 'Waiting for the earlier agents.') + '</p><div class="skel-line"></div><div class="skel-line"></div><div class="skel-line"></div></div>';
+  }
+  if (collapsed.has(c.key)) card.classList.add('collapsed');
+}
+
+function wireCard(key, body){
+  body.querySelectorAll('[data-copy]').forEach((btn) => btn.addEventListener('click', () => copyText(btn.dataset.copy, btn)));
+  const pb = body.querySelector('#publishBtn');
+  if (pb) pb.addEventListener('click', () => publishDemo());
+  body.querySelectorAll('.post-this-btn').forEach((btn) => btn.addEventListener('click', () => {
+    const idx = parseInt(btn.dataset.postidx, 10);
+    publishDemo(idx);
+  }));
+}
+
+function renderMarket(m){
+  const comps = arr(m.competitors).map((c) => {
+    c = (c && typeof c === 'object') ? c : {name:String(c), advantage:''};
+    const site = safeUrl(c.website);
+    const link = site ? ' <a href="' + esc(site) + '" target="_blank" rel="noopener">Visit site</a>' : '';
+    return '<div class="row-item"><strong>' + esc(c.name) + '</strong><span>' + esc(c.advantage) + link + '</span></div>';
+  }).join('');
+  const gaps = Array.isArray(m.gap_analysis) ? m.gap_analysis : [m.gap_analysis || m.gap || ''];
+  const tc = (m.target_customer && typeof m.target_customer === 'object') ? m.target_customer : {demographics:String(m.target_customer || '')};
+  const boxes = [['Who they are', tc.demographics], ['How they decide today', tc.behavior], ['What frustrates them', tc.pain_points], ['Where to reach them', tc.where_to_find]]
+    .filter((b) => b[1]).map((b) => '<div class="box"><b>' + esc(b[0]) + '</b><span>' + esc(b[1]) + '</span></div>').join('');
+  return '<h4>Competitors in your market</h4>' + comps +
+         '<h4>Gaps you can fill</h4><ul class="plain">' + gaps.filter(Boolean).map((g) => '<li>' + esc(g) + '</li>').join('') + '</ul>' +
+         '<h4>Your target customer</h4><div class="grid2">' + boxes + '</div>';
+}
+
+function renderWebsite(w){
+  const img = safeUrl(w.hero_image);
+  const link = safeUrl(w.preview_url) || (String(w.preview_url || '').startsWith('/preview/') ? w.preview_url : '');
+  return '<div class="site-card">' + (img ? '<img src="' + esc(img) + '" alt="" loading="lazy">' : '') +
+         '<div><h4>' + esc(w.company_name) + '</h4><p>' + esc(w.tagline) + '</p></div></div>' +
+         '<div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap"><a class="btn" href="' + esc(link) + '" target="_blank" rel="noopener">View your website</a>' +
+         '<button class="btn btn-quiet" type="button" onclick="toggleEditBox()">Edit website</button></div>' +
+         '<div id="editBox" hidden style="margin-top:14px">' +
+           '<p style="color:var(--dim);font-size:.86rem;margin-bottom:8px">Describe the changes you want. The AI will rebuild the website with your edits.</p>' +
+           '<textarea id="editInput" rows="3" maxlength="500" placeholder="Change the tagline to: Fresh bread, delivered warm. Use warmer colors. Add a section about our delivery promise." style="width:100%;padding:12px;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;color:var(--text);font:inherit;font-size:.9rem;resize:vertical;outline:none"></textarea>' +
+           '<div style="display:flex;gap:10px;margin-top:10px;align-items:center"><button class="btn" id="editSubmit" type="button" onclick="submitEdit()">Apply changes</button><span id="editStatus" style="font-size:.85rem;color:var(--dim)"></span></div>' +
+         '</div>' +
+         '<div class="note"><strong>Want a professional website with your own domain?</strong> <a href="https://autothynk.com" target="_blank" rel="noopener">Autothynk</a> can set up your custom domain, hosting, and a production-ready website.</div>';
+}
+
+function renderCustomers(c){
+  const segs = arr(c.segments);
+  if (!segs.length) return '<p class="empty">The Customer finder could not find named organizations this time. Try again in a minute.</p>';
+  return segs.map((s) => {
+    const targets = arr(s.targets).map((t) => {
+      const site = safeUrl(t.url);
+      const contacts = [];
+      if (t.phone) contacts.push('<span class="contact-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg><a href="tel:' + esc(String(t.phone).replace(/[^+\d]/g, '')) + '">' + esc(t.phone) + '</a></span>');
+      if (t.email) contacts.push('<span class="contact-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 7L2 7"/></svg><a href="mailto:' + esc(t.email) + '">' + esc(t.email) + '</a></span>');
+      if (site) contacts.push('<span class="contact-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg><a href="' + esc(site) + '" target="_blank" rel="noopener">Website</a></span>');
+      return '<div class="target"><div class="target-header"><strong>' + esc(t.name) + '</strong></div>' +
+             '<p>' + esc(t.pitch) + '</p>' +
+             (contacts.length ? '<div class="contact-row">' + contacts.join('') + '</div>' : '') + '</div>';
+    }).join('');
+    const body = targets || '<p class="empty">No named organizations found. ' + esc(s.how_to_find || '') + '</p>';
+    return '<div class="segment"><h5>' + esc(s.segment) + '</h5><p class="why">' + esc(s.why) + '</p>' + body + '</div>';
+  }).join('');
+}
+
+function renderContent(c){
+  const brand = c.brand || 'Your brand';
+  const posts = arr(c.posts);
+  let html = '';
+  if (posts.length) {
+    html += '<h4>Week-one Instagram posts</h4><div class="posts">' + posts.map((p, i) => {
+      const tags = arr(p.hashtags).join(' ');
+      const full = (p.caption || '') + '\n\n' + tags;
+      const img = safeUrl(p.image_preview || p.image_url);
+      return '<div class="post"><div class="post-top"><span class="avatar">' + esc(String(brand).charAt(0).toUpperCase()) + '</span>' +
+             '<div><b>' + esc(brand) + '</b><small>' + esc(p.day) + ', ' + esc(p.type) + '</small></div></div>' +
+             (img ? '<img src="' + esc(img) + '" alt="" loading="lazy">' : '') +
+             '<div class="post-body"><p>' + esc(p.caption) + '</p><div class="tags">' + esc(tags) + '</div></div>' +
+             '<div class="post-actions"><button class="btn btn-quiet" type="button" data-copy="' + esc(full) + '">Copy post</button>' +
+             (cfg.demo_publish ? '<button class="btn btn-quiet post-this-btn" type="button" data-postidx="' + i + '">Post this one</button>' : '') +
+             '</div></div>';
+    }).join('') + '</div><div id="publishBox"></div>';
+  } else {
+    html += '<p class="empty">The posts could not be written this time. ' + esc(c.content_error || '') + '</p>';
+  }
+  if (c.gmb_post) html += '<h4>Google Business Profile launch post</h4><div class="textblock">' + esc(c.gmb_post) + '</div><button class="btn btn-quiet" type="button" data-copy="' + esc(c.gmb_post) + '">Copy post</button>';
+  if (c.whatsapp_announcement) html += '<h4>WhatsApp and Facebook announcement</h4><div class="textblock">' + esc(c.whatsapp_announcement) + '</div><button class="btn btn-quiet" type="button" data-copy="' + esc(c.whatsapp_announcement) + '">Copy message</button>';
+  const weeks = arr((c.plan || {}).weeks);
+  if (weeks.length) {
+    html += '<h4>Your 30-day launch plan</h4><ol class="timeline">' + weeks.map((w) =>
+      '<li><div class="wk">Week ' + esc(w.week) + '</div><div><h5>' + esc(w.theme) + '</h5><ul>' +
+      arr(w.actions).map((a) => '<li>' + esc(a) + '</li>').join('') + '</ul></div></li>').join('') + '</ol>';
+  } else if (c.plan_error) {
+    html += '<p class="empty" style="margin-top:16px">The 30-day plan could not be written this time.</p>';
+  }
+  html += '<div class="cta"><h4>Want a full-time AI marketing team?</h4><p>Autothynk handles your ongoing social media, ads, and growth after launch week.</p><a class="btn btn-honey" href="https://autothynk.com" target="_blank" rel="noopener">Talk to Autothynk</a></div>';
+  return html;
+}
+
+/* ---------- live demo posting ---------- */
+function renderPublish(){
+  const box = $('publishBox');
+  if (!box) return;
+  const profile = safeUrl(cfg.profile_url);
+  const profileLink = profile ? '<a class="btn btn-quiet" href="' + esc(profile) + '" target="_blank" rel="noopener">Open the demo account</a>' : '';
+  let html = '';
+  if (!cfg.demo_publish) {
+    html = '<div class="live-box"><h5>Live posting is off in this environment</h5><p>Use the Copy post buttons above to publish these yourself.</p></div>';
+  } else if (pub.state === 'idle' || pub.state === 'retry') {
+    const left = cfg.remaining_today;
+    html = '<div class="live-box"><h5>Post to Instagram (live demo)</h5><p>Click "Post this one" on any post above, or use the button below to post the first one. ' +
+      (left > 0 ? left + ' live post' + (left === 1 ? '' : 's') + ' left today.' : 'Today\'s live posts are used up. Copy the post instead.') + '</p>' +
+      (pub.message ? '<p style="color:var(--bad)">' + esc(pub.message) + '</p>' : '') +
+      '<button class="btn btn-honey" id="publishBtn" type="button"' + (left > 0 ? '' : ' disabled') + '>Post to Instagram (live demo)</button></div>';
+  } else if (pub.state === 'sending' || pub.state === 'pending') {
+    html = '<div class="live-box" aria-live="polite"><h5><span class="spinner"></span>Publishing</h5><p>Sending the post to Instagram. <span id="pubSecs">' + mmss((Date.now() - pub.started) / 1000) + '</span> so far.</p></div>';
+  } else if (pub.state === 'slow') {
+    html = '<div class="live-box"><h5>Still sending</h5><p>Instagram is taking longer than usual. Check the demo account in a minute.</p><div class="live-actions">' + profileLink + '</div></div>';
+  } else if (pub.state === 'live') {
+    const link = safeUrl(pub.link);
+    html = '<div class="live-box live" aria-live="polite"><h5>Live now</h5><p>This post just went live on the AgentHive demo account. With the full kit, it posts to your account on your schedule.</p><div class="live-actions">' +
+      (link ? '<a class="btn btn-honey" href="' + esc(link) + '" target="_blank" rel="noopener">Open the post</a>' : '') + profileLink + '</div></div>';
+  } else if (pub.state === 'failed') {
+    html = '<div class="live-box bad" aria-live="polite"><h5>Instagram did not accept the post</h5><p>' + esc(pub.message || 'No reason was given.') + '</p><div class="live-actions">' + profileLink + '</div></div>';
+  }
+  box.innerHTML = html;
+  const pb = $('publishBtn');
+  if (pb) pb.addEventListener('click', publishDemo);
+}
+
+async function publishDemo(postIndex){
+  const idx = (typeof postIndex === 'number') ? postIndex : 0;
+  pub = {state:'sending', started:Date.now(), postIndex:idx};
+  renderPublish();
+  try {
+    const data = await api('/publish-demo', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({run_id: runId, post_index: idx})});
+    pub = {state:'pending', postId:data.post_id, started:Date.now()};
+    renderPublish();
+    startPublishWatch();
+  } catch (e) {
+    await loadConfig();
+    pub = {state:'retry', message:e.message};
+    renderPublish();
+  }
+}
+
+function startPublishWatch(){
+  clearInterval(pubPoll); clearInterval(pubClock);
+  pubClock = setInterval(() => { const s = $('pubSecs'); if (s) s.textContent = mmss((Date.now() - pub.started) / 1000); }, 1000);
+  pubPoll = setInterval(async () => {
+    try {
+      const r = await api('/publish-status/' + encodeURIComponent(pub.postId));
+      if (r.state === 'live') { pub = {state:'live', link:r.link}; stopPublishWatch(); loadConfig().then(renderPublish); renderPublish(); }
+      else if (r.state === 'failed') { pub = {state:'failed', message:r.message}; stopPublishWatch(); renderPublish(); }
+      else if (Date.now() - pub.started > 300000) { pub = {state:'slow'}; stopPublishWatch(); renderPublish(); }
+    } catch (e) { /* keep trying until the time limit */ }
+  }, 5000);
+}
+function stopPublishWatch(){ clearInterval(pubPoll); clearInterval(pubClock); }
+
+/* ---------- website edit ---------- */
+function toggleEditBox(){
+  const box = $('editBox');
+  if (box) box.hidden = !box.hidden;
+}
+
+async function submitEdit(){
+  const input = $('editInput');
+  const status = $('editStatus');
+  const btn = $('editSubmit');
+  if (!input || !input.value.trim()) { status.textContent = 'Describe your changes first.'; return; }
+  btn.disabled = true;
+  status.textContent = 'Rebuilding your website...';
+  status.style.color = 'var(--honey)';
+  try {
+    const data = await api('/edit-website', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({run_id: runId, edit_request: input.value.trim()})});
+    if (data.ok && data.website) {
+      latest.website = data.website;
+      cardSig['website'] = '';
+      renderCard(CARDS.find((c) => c.key === 'website'), latest);
+      status.textContent = 'Done. Click View your website to see the changes.';
+      status.style.color = 'var(--good)';
+    } else {
+      status.textContent = 'Something went wrong. Try again.';
+      status.style.color = 'var(--bad)';
+    }
+  } catch (e) {
+    status.textContent = e.message;
+    status.style.color = 'var(--bad)';
+  }
+  btn.disabled = false;
+}
+
+/* ---------- 3D tilt on hex cluster (mouse only, desktop) ---------- */
+const cluster = document.querySelector('.cluster');
+if (cluster && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  cluster.style.transformStyle = 'preserve-3d';
+  cluster.style.perspective = '600px';
+  cluster.addEventListener('mousemove', (e) => {
+    const r = cluster.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width - 0.5;
+    const y = (e.clientY - r.top) / r.height - 0.5;
+    cluster.style.transform = 'rotateY(' + (x * 14) + 'deg) rotateX(' + (-y * 10) + 'deg)';
+  });
+  cluster.addEventListener('mouseleave', () => { cluster.style.transform = ''; });
+}
+
+loadConfig();
+</script>
+</body>
+</html>

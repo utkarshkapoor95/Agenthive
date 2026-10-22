@@ -1,0 +1,8 @@
+fastapi
+uvicorn[standard]
+langgraph
+groq
+python-dotenv
+pydantic
+requests
+tavily-python

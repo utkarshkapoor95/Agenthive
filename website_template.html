@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{COMPANY_NAME}}</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:{{PRIMARY_COLOR}};--secondary:{{SECONDARY_COLOR}};--accent:{{ACCENT_COLOR}}}
+body{font-family:'Inter',system-ui,sans-serif;color:#2d2d3a;line-height:1.6;overflow-x:hidden}
+.container{max-width:1000px;margin:0 auto;padding:0 28px}
+
+/* Scroll Animations */
+.reveal{opacity:0;transform:translateY(40px);transition:opacity 0.8s cubic-bezier(.22,1,.36,1),transform 0.8s cubic-bezier(.22,1,.36,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-delay-1{transition-delay:0.1s}
+.reveal-delay-2{transition-delay:0.2s}
+.reveal-delay-3{transition-delay:0.3s}
+
+/* 3D Card Hover */
+.card-3d{transition:transform 0.4s ease,box-shadow 0.4s ease;transform-style:preserve-3d}
+.card-3d:hover{transform:translateY(-8px) rotateX(2deg);box-shadow:0 20px 60px rgba(0,0,0,0.12)}
+
+/* Nav */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 0;background:rgba(0,0,0,0.5);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,255,255,0.06)}
+.nav .container{display:flex;align-items:center;justify-content:space-between}
+.nav-brand{font-size:1.15rem;font-weight:800;color:#fff;text-decoration:none;font-family:'Playfair Display',serif}
+.nav-links{display:flex;gap:28px}
+.nav-links a{color:rgba(255,255,255,0.65);text-decoration:none;font-size:0.85rem;font-weight:500;transition:color 0.2s;letter-spacing:0.02em}
+.nav-links a:hover{color:#fff}
+
+/* Hero */
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;color:#fff}
+.hero-bg{position:absolute;inset:0;background:url('{{HERO_IMAGE}}') center/cover no-repeat}
+.hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(170deg,rgba(0,0,0,0.75) 0%,rgba(0,0,0,0.4) 40%,var(--secondary) 100%);opacity:0.92}
+.hero-content{position:relative;z-index:1;max-width:700px;padding:40px 24px;animation:heroIn 1s ease-out}
+@keyframes heroIn{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+.hero h1{font-size:clamp(2.6rem,7vw,4.5rem);font-weight:800;letter-spacing:-0.04em;margin-bottom:20px;line-height:1.05;font-family:'Playfair Display',serif}
+.hero .tagline{font-size:clamp(1rem,2.5vw,1.3rem);opacity:0.85;margin-bottom:14px;font-weight:400}
+.hero .description{font-size:0.95rem;opacity:0.6;max-width:520px;margin:0 auto 40px;line-height:1.7}
+.cta-btn{display:inline-block;padding:18px 48px;background:var(--accent);color:#fff;border-radius:60px;font-size:1.05rem;font-weight:700;text-decoration:none;transition:transform 0.3s,box-shadow 0.3s;box-shadow:0 8px 32px rgba(0,0,0,0.35);letter-spacing:0.01em}
+.cta-btn:hover{transform:translateY(-4px) scale(1.02);box-shadow:0 16px 48px rgba(0,0,0,0.45)}
+
+/* About - Split Layout with Image */
+.about{padding:80px 0;background:#f8f9fc}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+.about-img{border-radius:20px;overflow:hidden;box-shadow:0 16px 48px rgba(0,0,0,0.1)}
+.about-img img{width:100%;height:300px;object-fit:cover;display:block}
+.about-text h2{font-size:1.8rem;font-weight:800;margin-bottom:16px;color:#1a1a2e;font-family:'Playfair Display',serif}
+.about-text p{color:#555;font-size:0.95rem;line-height:1.8}
+
+/* Section Titles */
+.section-title{text-align:center;font-size:clamp(1.6rem,4vw,2.2rem);font-weight:800;letter-spacing:-0.02em;margin-bottom:12px;color:#1a1a2e;font-family:'Playfair Display',serif}
+.section-sub{text-align:center;color:#888;font-size:0.9rem;margin-bottom:48px}
+
+/* How It Works */
+.how{padding:80px 0;background:#fff}
+.steps-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.step-card{text-align:center;padding:32px 16px;background:#f4f5f9;border-radius:16px;transition:transform 0.3s,box-shadow 0.3s}
+.step-card:hover{transform:translateY(-6px);box-shadow:0 12px 36px rgba(0,0,0,0.06)}
+.step-number{width:52px;height:52px;border-radius:50%;background:var(--secondary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:800;margin:0 auto 18px;box-shadow:0 6px 20px rgba(0,0,0,0.15)}
+.step-card h3{font-size:0.95rem;font-weight:700;margin-bottom:6px;color:#1a1a2e}
+.step-card p{font-size:0.82rem;color:#777}
+
+/* Features */
+.features{padding:80px 0;background:#f0f2f8}
+.features-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.feature-card{padding:32px;border-radius:16px;background:#fff;border-left:5px solid var(--accent);box-shadow:0 2px 12px rgba(0,0,0,0.04)}
+.feature-card h3{font-size:1.05rem;font-weight:700;margin-bottom:8px;color:#1a1a2e}
+.feature-card p{color:#666;font-size:0.9rem;line-height:1.6}
+
+/* Gallery */
+.gallery{padding:80px 0;background:#fff}
+.gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.gallery-item{border-radius:14px;overflow:hidden;aspect-ratio:4/3}
+.gallery-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.5s ease}
+.gallery-item:hover img{transform:scale(1.08)}
+
+/* Testimonials */
+.testimonials{padding:80px 0;background:var(--secondary);color:#fff}
+.testimonials .section-title{color:#fff}
+.testimonials .section-sub{color:rgba(255,255,255,0.5)}
+.testimonials-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.testimonial-card{padding:28px;border-radius:16px;background:rgba(255,255,255,0.08);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.1)}
+.quote{font-size:0.92rem;color:rgba(255,255,255,0.8);line-height:1.7;margin-bottom:18px;font-style:italic}
+.testimonial-author{display:flex;align-items:center;gap:12px}
+.author-avatar{width:44px;height:44px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.1rem;flex-shrink:0}
+.author-name{font-weight:600;font-size:0.9rem;color:#fff}
+.author-role{font-size:0.78rem;color:rgba(255,255,255,0.5)}
+
+/* Pricing */
+.pricing{padding:80px 0;background:#f8f9fc}
+.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:24px;max-width:660px;margin:0 auto}
+.price-card{padding:40px 28px;border:2px solid #e0e2ea;border-radius:20px;text-align:center;background:#fff;position:relative;transition:transform 0.3s,box-shadow 0.3s}
+.price-card.highlighted{border-color:var(--accent);box-shadow:0 16px 56px rgba(0,0,0,0.1);transform:scale(1.04)}
+.popular-badge{position:absolute;top:-15px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;padding:6px 22px;border-radius:24px;font-size:0.72rem;font-weight:700;letter-spacing:0.04em}
+.plan-name{font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--accent);margin-bottom:8px}
+.price{font-size:2.6rem;font-weight:800;margin-bottom:24px;color:#1a1a2e}
+.price-card ul{list-style:none;text-align:left;padding:0;margin-bottom:28px}
+.price-card li{padding:10px 0;color:#555;font-size:0.88rem;border-bottom:1px solid #f0f1f5;padding-left:18px;position:relative}
+.price-card li::before{content:'';position:absolute;left:0;top:16px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+.price-card li:last-child{border-bottom:none}
+.price-cta-fill{display:inline-block;padding:14px 36px;border-radius:12px;font-size:0.9rem;font-weight:600;text-decoration:none;background:var(--accent);color:#fff;transition:transform 0.2s,box-shadow 0.2s}
+.price-cta-outline{display:inline-block;padding:14px 36px;border-radius:12px;font-size:0.9rem;font-weight:600;text-decoration:none;border:2px solid var(--accent);color:var(--accent);transition:transform 0.2s}
+.price-cta-fill:hover,.price-cta-outline:hover{transform:translateY(-3px)}
+
+/* FAQ */
+.faq-section{padding:80px 0;background:#fff}
+.faq-list{max-width:660px;margin:0 auto}
+.faq-item{border-bottom:1px solid #eaeaea;margin-bottom:4px}
+.faq-item summary{padding:20px 0;font-size:0.95rem;font-weight:600;cursor:pointer;color:#1a1a2e;list-style:none;display:flex;justify-content:space-between;align-items:center}
+.faq-item summary::after{content:'+';font-size:1.4rem;color:var(--accent);font-weight:700;transition:transform 0.3s}
+.faq-item[open] summary::after{transform:rotate(45deg)}
+.faq-item p{padding:0 0 20px;font-size:0.9rem;color:#666;line-height:1.7}
+
+/* CTA Banner */
+.cta-banner{padding:64px 0;background:linear-gradient(135deg,var(--secondary) 0%,var(--accent) 100%);text-align:center;color:#fff}
+.cta-banner h2{font-size:1.8rem;font-weight:800;margin-bottom:10px;font-family:'Playfair Display',serif}
+.cta-banner p{opacity:0.8;margin-bottom:28px;font-size:0.95rem}
+.cta-banner .cta-btn{background:#fff;color:var(--secondary);box-shadow:0 8px 32px rgba(0,0,0,0.2)}
+
+/* Contact */
+.contact{padding:72px 0;background:var(--secondary);color:#fff;text-align:center}
+.contact .section-title{color:#fff}
+.contact-grid{display:flex;justify-content:center;gap:48px;flex-wrap:wrap;margin-top:36px}
+.contact-item{text-align:center}
+.contact-label{font-size:0.7rem;text-transform:uppercase;letter-spacing:0.08em;opacity:0.45;margin-bottom:8px}
+.contact-value a{color:#fff;text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.2);font-size:0.95rem;font-weight:500}
+.contact-value a:hover{border-color:#fff}
+.social-links{display:flex;justify-content:center;gap:16px;margin-top:36px}
+.social-links a{display:flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);transition:background 0.3s,transform 0.3s}
+.social-links a:hover{background:rgba(255,255,255,0.18);transform:translateY(-3px)}
+.social-links svg{width:20px;height:20px;fill:#fff}
+
+.footer{padding:24px 0;text-align:center;background:#000;color:rgba(255,255,255,0.25);font-size:0.75rem}
+
+@media(max-width:768px){
+  .about-grid{grid-template-columns:1fr}
+  .steps-grid{grid-template-columns:1fr 1fr}
+  .features-grid{grid-template-columns:1fr}
+  .gallery-grid{grid-template-columns:1fr 1fr}
+  .nav-links{display:none}
+  .hero{min-height:85vh}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav"><div class="container">
+  <a href="#" class="nav-brand">{{COMPANY_NAME}}</a>
+  <div class="nav-links"><a href="#about">About</a><a href="#features">Features</a><a href="#pricing">Pricing</a><a href="#contact">Contact</a></div>
+</div></nav>
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <h1>{{COMPANY_NAME}}</h1>
+    <p class="tagline">{{TAGLINE}}</p>
+    <p class="description">{{HERO_DESCRIPTION}}</p>
+    <a href="#pricing" class="cta-btn">{{CTA_TEXT}}</a>
+  </div>
+</section>
+
+<section class="about reveal" id="about"><div class="container">
+  <div class="about-grid">
+    <div class="about-img"><img src="{{IMAGE_2}}" alt="About {{COMPANY_NAME}}"></div>
+    <div class="about-text">
+      <h2>About Us</h2>
+      <p>{{ABOUT_TEXT}}</p>
+    </div>
+  </div>
+</div></section>
+
+<section class="how reveal"><div class="container">
+  <div class="section-title">How It Works</div>
+  <div class="section-sub">Get started in 4 simple steps</div>
+  <div class="steps-grid">{{HOW_IT_WORKS_HTML}}</div>
+</div></section>
+
+<section class="features reveal" id="features"><div class="container">
+  <div class="section-title">What You Get</div>
+  <div class="section-sub">Everything you need to succeed</div>
+  <div class="features-grid">{{FEATURES_HTML}}</div>
+</div></section>
+
+<section class="gallery reveal"><div class="container">
+  <div class="section-title">See It In Action</div>
+  <div class="section-sub">A glimpse of what we do</div>
+  <div class="gallery-grid">
+    <div class="gallery-item card-3d"><img src="{{IMAGE_2}}" alt="Gallery 1"></div>
+    <div class="gallery-item card-3d"><img src="{{IMAGE_3}}" alt="Gallery 2"></div>
+    <div class="gallery-item card-3d"><img src="{{IMAGE_4}}" alt="Gallery 3"></div>
+  </div>
+</div></section>
+
+<section class="testimonials reveal"><div class="container">
+  <div class="section-title">What People Say</div>
+  <div class="section-sub">Trusted by real customers</div>
+  <div class="testimonials-grid">{{TESTIMONIALS_HTML}}</div>
+</div></section>
+
+<section class="pricing reveal" id="pricing"><div class="container">
+  <div class="section-title">Simple Pricing</div>
+  <div class="section-sub">Start free, upgrade when ready</div>
+  <div class="pricing-grid">{{PRICING_HTML}}</div>
+</div></section>
+
+<section class="faq-section reveal"><div class="container">
+  <div class="section-title">FAQs</div>
+  <div class="faq-list">{{FAQ_HTML}}</div>
+</div></section>
+
+<section class="cta-banner reveal"><div class="container">
+  <h2>Ready to get started?</h2>
+  <p>Join hundreds of happy customers today.</p>
+  <a href="#contact" class="cta-btn">{{CTA_TEXT}}</a>
+</div></section>
+
+<section class="contact" id="contact"><div class="container">
+  <div class="section-title">Get in Touch</div>
+  <div class="contact-grid">
+    <div class="contact-item"><div class="contact-label">Phone</div><div class="contact-value"><a href="tel:{{CONTACT_PHONE}}">{{CONTACT_PHONE}}</a></div></div>
+    <div class="contact-item"><div class="contact-label">Email</div><div class="contact-value"><a href="mailto:{{CONTACT_EMAIL}}">{{CONTACT_EMAIL}}</a></div></div>
+    <div class="contact-item"><div class="contact-label">WhatsApp</div><div class="contact-value"><a href="{{CONTACT_WHATSAPP}}" target="_blank">Chat with us</a></div></div>
+  </div>
+  <div class="social-links">
+    <a href="{{SOCIAL_INSTAGRAM}}" target="_blank" title="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
+    <a href="{{SOCIAL_TWITTER}}" target="_blank" title="Twitter"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+    <a href="{{SOCIAL_FACEBOOK}}" target="_blank" title="Facebook"><svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+    <a href="{{CONTACT_WHATSAPP}}" target="_blank" title="WhatsApp"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
+  </div>
+</div></section>
+
+<footer class="footer"><div class="container">{{COMPANY_NAME}}. Built with AgentHive AI.</div></footer>
+
+<script>
+const obs=new IntersectionObserver(e=>{e.forEach(el=>{if(el.isIntersecting)el.target.classList.add('visible')})},{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+
+</body>
+</html>
