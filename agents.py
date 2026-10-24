@@ -234,7 +234,7 @@ RULES:
 - Do NOT use emojis anywhere.
 - Make copy specific to their city and business model.
 - Use local currency (Rs or INR for India).
-- Generate realistic testimonials with local names.
+- Generate realistic testimonials with local names. Testimonials must be from REGULAR CUSTOMERS, not executives or founders. Use simple descriptions like "Regular customer", "Local resident", "First-time visitor", "Loyal customer since 2023". NEVER use titles like CEO, Founder, Director, Head of, VP, or any corporate designation. NEVER mention any company name. These should sound like real people leaving a Google review, not VIPs endorsing a brand.
 
 You MUST respond with ONLY valid JSON:
 {
@@ -255,9 +255,9 @@ You MUST respond with ONLY valid JSON:
     {"title": "Feature name", "description": "One sentence"}
   ],
   "testimonials": [
-    {"name": "Full Name", "role": "Role, Company", "quote": "1-2 sentences"},
-    {"name": "Full Name", "role": "Role, Company", "quote": "1-2 sentences"},
-    {"name": "Full Name", "role": "Role, Company", "quote": "1-2 sentences"}
+    {"name": "First Name", "role": "Regular customer", "quote": "1-2 sentences in casual, natural language"},
+    {"name": "First Name", "role": "Local resident", "quote": "1-2 sentences in casual, natural language"},
+    {"name": "First Name", "role": "Loyal customer", "quote": "1-2 sentences in casual, natural language"}
   ],
   "cta_text": "Call to action button text",
   "pricing": [
