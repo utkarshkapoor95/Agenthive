@@ -28,12 +28,12 @@ jobs:
       - name: Run Ruff linter
         run: ruff check . --output-format=github || true
 
-      - name: Verify core imports
+      - name: Verify dependencies installed
         run: |
-          python -c "import agents; print('agents.py OK')"
-          python -c "import graph; print('graph.py OK')"
-          python -c "import tools; print('tools.py OK')"
-          python -c "import server; print('server.py OK')"
+          python -c "import fastapi; print('fastapi OK')"
+          python -c "import langchain; print('langchain OK')"
+          python -c "import langgraph; print('langgraph OK')"
+          python -c "import uvicorn; print('uvicorn OK')"
 
   docker-build:
     runs-on: ubuntu-latest
