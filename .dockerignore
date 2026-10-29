@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+*.pyo
+venv/
+.env
+.git/
+.gitignore
+.github/
+docs/
+generated_sites/
+*.md
+buffer_test.py
+graph_backup.py
+Dockerfile
+docker-compose.yml
+.dockerignore
