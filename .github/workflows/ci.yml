@@ -31,9 +31,10 @@ jobs:
       - name: Verify dependencies installed
         run: |
           python -c "import fastapi; print('fastapi OK')"
-          python -c "import langchain; print('langchain OK')"
           python -c "import langgraph; print('langgraph OK')"
+          python -c "import groq; print('groq OK')"
           python -c "import uvicorn; print('uvicorn OK')"
+          python -c "import tavily; print('tavily OK')"
 
   docker-build:
     runs-on: ubuntu-latest
